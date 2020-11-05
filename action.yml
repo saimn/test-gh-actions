@@ -6,16 +6,18 @@ inputs:
     required: true
     default: 'World'
 outputs:
-  random-number: 
+  random-number:
     description: "Random number"
     value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
   using: "composite"
-  steps: 
+  steps:
     - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
       shell: bash
     - run: ${{ github.action_path }}/goodbye.sh
       shell: bash
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install python-build and twine
+      run: python -m pip install build twine
